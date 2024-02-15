@@ -6,6 +6,7 @@ export default {
     host: process.env.POSTGRESQL_HOST || 'localhost',
     db: 'rinha'
   },
-  PORT: process.env.PORT || 3002,
-  NODE_ENV: process.env.NODE_ENV || 'development'
+  PORT: process.env.PORT || 3000,
+  NODE_ENV: process.env.NODE_ENV || 'development',
+  DATABASE_URL: process.env.DATABASE_URL || 'postgresql://postgres:postgres@localhost:5432/rinha'
 } as const;

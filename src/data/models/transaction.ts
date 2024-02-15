@@ -1,5 +1,7 @@
+import { Generated } from "kysely";
+
 export interface Transaction {
-  id?: string;
+  id: Generated<number>;
   cliente_id: number;
   valor: number;
   tipo: "d" | "c";

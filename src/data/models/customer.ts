@@ -1,5 +1,7 @@
+import { Generated } from "kysely";
+
 export interface Customer {
-  id: string;
+  id: Generated<number>;
   nome: string;
   limite: number;
 }

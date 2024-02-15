@@ -3,14 +3,14 @@ import { Kysely, sql } from "kysely"
 export async function up(db: Kysely<any>): Promise<void> {
   await db.schema
     .createTable('clientes')
-    .addColumn('id', 'integer', (col) => col.primaryKey())
+    .addColumn('id', 'serial', (col) => col.notNull().unique())
     .addColumn('nome', 'text', (col) => col.notNull())
     .addColumn('limite', 'integer', (col) => col.notNull())
     .execute()
 
   await db.schema
     .createTable('transacoes')
-    .addColumn('id', 'integer', (col) => col.primaryKey())
+    .addColumn('id', 'serial', (col) => col.notNull())
     .addColumn('cliente_id', 'integer', (col) =>
       col.references('clientes.id').onDelete('cascade').notNull()
     )
@@ -23,7 +23,7 @@ export async function up(db: Kysely<any>): Promise<void> {
 
     await db.schema
     .createTable('saldos')
-    .addColumn('id', 'integer', (col) => col.primaryKey())
+    .addColumn('id', 'serial', (col) => col.notNull().unique())
     .addColumn('cliente_id', 'integer', (col) =>
       col.references('clientes.id').onDelete('cascade').notNull()
     )

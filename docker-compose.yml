@@ -6,11 +6,13 @@ services:
     build: .
     hostname: api01
     environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=123
-      - POSTGRES_DB=rinha
-      - POSTGRES_HOST=db
+      - POSTGRESQL_USER=postgres
+      - POSTGRESQL_PASSWORD=123
+      - POSTGRESQL_DB=rinha
+      - POSTGRESQL_HOST=db
       - PORT=3000
+      - NODE_ENV=production
+      - DATABASE_URL=postgres://postgres:123@db:5432/rinha
     ports:
       - "3001:3000"
     depends_on:
@@ -28,9 +30,11 @@ services:
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=123
-      - POSTGRES_DB=rinha
+      - POSTGRESQL_DB=rinha
       - POSTGRES_HOST=db
       - PORT=3000
+      - NODE_ENV=production
+      - DATABASE_URL=postgres://postgres:123@db:5432/rinha
     ports:
       - "3002:3000"
  
@@ -46,23 +50,26 @@ services:
     deploy:
       resources:
         limits:
-          cpus: "0.2"
-          memory: "10MB"
+          cpus: "0.1"
+          memory: "30MB"
 
   db:
     image: postgres:latest
     hostname: db
     environment:
       - POSTGRES_PASSWORD=123
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=rinha
     ports:
       - "5432:5432"
     volumes:
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    command: postgres -c checkpoint_timeout=600 -c max_wal_size=4096
     deploy:
       resources:
         limits:
           cpus: "0.9"
-          memory: "300MB"
+          memory: "200MB"
 
 networks:
   default:

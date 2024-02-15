@@ -10,7 +10,7 @@ import { env } from "../../config";
 export type Timestamp = ColumnType<Date, Date | string, Date | string>;
 
 type Customer = {
-  id: number;
+  id: Generated<number>;
   nome: string;
   limite: number;
 }
@@ -25,7 +25,7 @@ type Transaction = {
 }
 
 type Funds = {
-  id: number;
+  id: Generated<number>;
   cliente_id: number;
   valor: number;
 }
@@ -38,12 +38,13 @@ export interface Database {
 
 const dialect = new PostgresDialect({
   pool: async () => new Pool({
-    database: env.default.POSTGRESQL.db,
-    host: env.default.POSTGRESQL.host,
-    user: env.default.POSTGRESQL.user,
-    port: +env.default.POSTGRESQL.port,
-    password: env.default.POSTGRESQL.password,
-    max: 256,
+    // database: env.default.POSTGRESQL.db,
+    // host: env.default.POSTGRESQL.host,
+    // user: env.default.POSTGRESQL.user,
+    // port: +env.default.POSTGRESQL.port,
+    // password: env.default.POSTGRESQL.password,
+    // max: 256,
+    connectionString: env.default.DATABASE_URL
   })
 })
 
@@ -61,9 +62,7 @@ export async function migrateToLatest() {
     })
   })
   const { error, results} = await migrator.migrateToLatest();
-  console.log('alo')
   results?.forEach((it) => {
-    console.log('it', it)
     if (it.status === 'Success') {
       console.log(`migration "${it.migrationName}" was executed successfully`)
     } else if (it.status === 'Error') {

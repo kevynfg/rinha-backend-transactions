@@ -8,7 +8,6 @@ export class Customer {
   ) { }
   async transaction(request: Request, res: Response): Promise<any> {
     try {
-      console.log('entrou', request.body, request.params)
       const { body = null, params = null } = request;
       if (!body || !params) {
         return res.status(400).json({
@@ -16,7 +15,6 @@ export class Customer {
         })
       };
       const transaction = await this.customerService.createTransaction(params.id, body);
-      console.log('transaction controller', transaction)
       if (!transaction || typeof transaction === 'number') {
         return res.status(transaction).json({
           error: ERRORS[transaction]
@@ -35,7 +33,6 @@ export class Customer {
   }
 
   async getCustomer(request: Request, res: Response): Promise<any> {
-    console.log('entrou')
     const { params } = request;
     if (!params) {
       return res.status(400).json({

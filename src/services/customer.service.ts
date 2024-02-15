@@ -10,7 +10,6 @@ export class CustomerService implements ICustomer {
   ) {}
   async createTransaction(id: string, transaction: Transaction): Promise<TransactionResponse | number> {
     const customer = await this.customerRepository.getCustomer(+id);
-    console.log('customer', customer)
     if (!customer) {
       return ERROR_CODE.NOT_FOUND;
     };
@@ -19,25 +18,16 @@ export class CustomerService implements ICustomer {
       return ERROR_CODE.UNPROCESSABLE_ENTITY;
     }
     const transactionForRepository = makeTransactionForRepository(id, transaction);
-    console.log('transactionForRepository', transactionForRepository);
-    return await this.customerRepository.createTransaction(transactionForRepository);
+    const res = await this.customerRepository.createTransaction(transactionForRepository);
+    return res;
   }
 
   async getCustomer(id: number): Promise<FundsResponse | number> {
-    console.log('entrou', id)
     const lastTransactions = await this.customerRepository.getCustomerLastTransactions(id);
-    console.log('lastTransactions', lastTransactions)
     if (!lastTransactions) {
       return ERROR_CODE.NOT_FOUND;
     }
-    return {
-      saldo: {
-        total: 0,
-        data_extrato: '',
-        limite: 0
-      },
-      ultimas_transacoes: []
-    };
+    return lastTransactions;
   }
 }
 

@@ -1,11 +1,11 @@
 CREATE TABLE clientes (
-  id SERIAL PRIMARY KEY,
+  id SERIAL NOT NULL UNIQUE,
   nome VARCHAR(100) NOT NULL,
   limite INTEGER NOT NULL
 );
 
 CREATE TABLE transacoes (
-  id SERIAL PRIMARY KEY AUTOINCREMENT,
+  id SERIAL NOT NULL UNIQUE,
   cliente_id INTEGER NOT NULL,
   valor INTEGER NOT NULL,
   tipo CHAR(1) NOT NULL,
@@ -15,7 +15,7 @@ CREATE TABLE transacoes (
 );
 
 CREATE TABLE saldos (
-  id SERIAL PRIMARY KEY,
+  id SERIAL NOT NULL UNIQUE,
   cliente_id INTEGER NOT NULL,
   valor INTEGER NOT NULL,
   CONSTRAINT fk_cliente_id FOREIGN KEY (cliente_id) REFERENCES clientes(id)
