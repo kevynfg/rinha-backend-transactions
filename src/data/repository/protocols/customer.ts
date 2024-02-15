@@ -1,9 +1,15 @@
-import { Transaction } from "../../models/transaction";
 
 export interface CustomerRepository {
-  createTransaction: (transaction: Transaction) => Promise<Transaction>;
-  getCustomerLastTransactions: (id: number) => Promise<FundsResponse>;
+  createTransaction: (transaction: TransactionRequest) => Promise<any>;
+  getCustomerLastTransactions: (id: number) => Promise<any>;
   getCustomer: (id: number) => Promise<any>;
+}
+
+export type TransactionRequest = {
+  cliente_id: number;
+  valor: number;
+  tipo: "d" | "c";
+  descricao: string;
 }
 
 export type FundsResponse = {

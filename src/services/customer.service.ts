@@ -1,33 +1,34 @@
 import { Customer } from "../data/models/customer";
 import { Transaction } from "../data/models/transaction";
 import { CustomerRepository, FundsResponse } from "../data/repository/protocols/customer";
+import { ERROR_CODE } from "../utils/errors";
 import { ICustomer, TransactionResponse } from "./protocols/customer";
 
 export class CustomerService implements ICustomer {
   constructor(
     private readonly customerRepository: CustomerRepository
   ) {}
-  async createTransaction(transaction: Transaction): Promise<TransactionResponse> {
-    const customer = await this.customerRepository.getCustomer(+transaction.cliente_id);
+  async createTransaction(id: string, transaction: Transaction): Promise<TransactionResponse | number> {
+    const customer = await this.customerRepository.getCustomer(+id);
+    console.log('customer', customer)
     if (!customer) {
-      return null
+      return ERROR_CODE.NOT_FOUND;
     };
     const isTransactionValid = validateLimitAndBalance(transaction, customer);
     if (!isTransactionValid) {
-      return 'Transação inválida';
+      return ERROR_CODE.UNPROCESSABLE_ENTITY;
     }
-    //return this.customerRepository.createTransaction(transaction);
-    return {
-      limite: 0,
-      saldo: 0
-    }
+    const transactionForRepository = makeTransactionForRepository(id, transaction);
+    console.log('transactionForRepository', transactionForRepository);
+    return await this.customerRepository.createTransaction(transactionForRepository);
   }
 
-  async getCustomer(id: number): Promise<FundsResponse> {
+  async getCustomer(id: number): Promise<FundsResponse | number> {
     console.log('entrou', id)
     const lastTransactions = await this.customerRepository.getCustomerLastTransactions(id);
+    console.log('lastTransactions', lastTransactions)
     if (!lastTransactions) {
-      return null;
+      return ERROR_CODE.NOT_FOUND;
     }
     return {
       saldo: {
@@ -50,9 +51,9 @@ const validateLimitAndBalance = (transaction: Transaction, customerData: Custome
   return true;
 }
 
-const makeTransactionForRepository = (transaction: Transaction) => {
+const makeTransactionForRepository = (id: string, transaction: Transaction) => {
   return {
-    cliente_id: transaction.cliente_id,
+    cliente_id: +id,
     valor: transaction.valor,
     tipo: transaction.tipo,
     descricao: transaction.descricao

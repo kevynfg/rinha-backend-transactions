@@ -35,5 +35,5 @@ export async function up(db: Kysely<any>): Promise<void> {
 export async function down(db: Kysely<any>): Promise<void> {
   await db.schema.dropTable('clientes').execute()
   await db.schema.dropTable('transacoes').execute()
-  await db.schema.dropTable('saldo').execute()
+  await db.schema.dropTable('saldos').execute()
 }

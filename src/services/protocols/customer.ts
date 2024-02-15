@@ -1,7 +1,7 @@
 import { Transaction } from "../../data/models/transaction";
 
 export interface ICustomer {
-  createTransaction: (transaction: Transaction) => Promise<TransactionResponse>;
+  createTransaction: (id: string, transaction: Transaction) => Promise<TransactionResponse | number>;
   getCustomer: (id: number) => Promise<any>;
 }
 

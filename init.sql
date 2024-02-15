@@ -5,7 +5,7 @@ CREATE TABLE clientes (
 );
 
 CREATE TABLE transacoes (
-  id SERIAL PRIMARY KEY,
+  id SERIAL PRIMARY KEY AUTOINCREMENT,
   cliente_id INTEGER NOT NULL,
   valor INTEGER NOT NULL,
   tipo CHAR(1) NOT NULL,
@@ -37,3 +37,30 @@ BEGIN
 		SELECT id, 0 FROM clientes;
 END;
 $$;
+
+
+-- CREATE TABLE IF NOT EXISTS clientes (
+--   id SERIAL PRIMARY KEY,
+--   nome VARCHAR(100) NOT NULL,
+--   limite INTEGER NOT NULL
+-- );
+
+-- DO $$
+-- BEGIN
+-- 	INSERT INTO clientes (id, nome, limite)
+-- 	VALUES
+-- 		(1, 'o barato sai caro', 1000 * 100),
+-- 		(2, 'zan corp ltda', 800 * 100),
+-- 		(3, 'les cruders', 10000 * 100),
+-- 		(4, 'padaria joia de cocaia', 100000 * 100),
+-- 		(5, 'kid mais', 5000 * 100);
+		
+-- 		INSERT INTO saldos (id, cliente_id, valor)
+-- 		VALUES 
+-- 			(1, 1, 0),
+-- 			(2, 2, 0),
+-- 			(3, 3, 0),
+-- 			(4, 4, 0),
+-- 			(5, 5, 0);
+-- END;
+-- $$;
